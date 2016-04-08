@@ -10,6 +10,8 @@
 
 create a tab control component, to which user can add tab item
 
+using ECMA 6 only
+
 # architecture
 
 1. parent owns children, but no children's children.

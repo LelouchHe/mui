@@ -1,1 +1,9 @@
+
+node_modules/
+coverage/
+
 *.swp
+*.map
+*.log
+
+test/unit/specs.js

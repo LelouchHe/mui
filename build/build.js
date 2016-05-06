@@ -18,7 +18,9 @@ var libMiniZipFilename = libMiniFilename + '.zip';
 rollup.rollup({
     entry: 'src/index.js',
     plugins: [
-        babel()
+        babel({
+            presets: ["es2015-rollup"]
+        })
     ]
 })
 .then(function (bundle) {
@@ -31,7 +33,9 @@ rollup.rollup({
     return rollup.rollup({
         entry: 'src/index.js',
         plugins: [
-            babel()
+            babel({
+                presets: ["es2015-rollup"]
+            })
         ]
     })
     .then(function (bundle) {
@@ -46,7 +50,9 @@ rollup.rollup({
     return rollup.rollup({
         entry: 'src/index.js',
         plugins: [
-            babel()
+            babel({
+                presets: ["es2015-rollup"]
+            })
         ]
     })
     .then(function (bundle) {

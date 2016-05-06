@@ -1,17 +1,18 @@
+'use strict';
 
 function initDeps(o, data) {
     var funcs = {};
-    var callstack  = [];
+    var callstack = [];
     var deps = {};
 
-    var notify = function (key) {
+    var notify = function notify(key) {
         if (!deps[key]) {
             return;
         }
         var keys = Object.keys(deps[key]);
-        for (let i = 0; i < keys.length; i++) {
-            let k = keys[i];
-            let v = funcs[k].call(o);
+        for (var i = 0; i < keys.length; i++) {
+            var k = keys[i];
+            var v = funcs[k].call(o);
             if (data[k] !== v) {
                 data[k] = v;
                 notify(k);
@@ -20,8 +21,9 @@ function initDeps(o, data) {
     };
 
     var keys = Object.keys(data);
-    for (let i = 0; i < keys.length; i++) {
-        let key = keys[i];
+
+    var _loop = function _loop(i) {
+        var key = keys[i];
         if (typeof data[key] === "function") {
             funcs[key] = data[key];
             delete data[key];
@@ -29,9 +31,9 @@ function initDeps(o, data) {
         Object.defineProperty(o, key, {
             configurable: false,
             enumerable: true,
-            get: function () {
+            get: function get() {
                 if (callstack.length > 0) {
-                    let last = callstack[callstack.length - 1];
+                    var last = callstack[callstack.length - 1];
                     if (!deps[key]) {
                         deps[key] = {};
                     }
@@ -46,7 +48,7 @@ function initDeps(o, data) {
 
                 return data[key];
             },
-            set: function (value) {
+            set: function set(value) {
                 if (!(key in data)) {
                     console.log("this is not allowed");
                 }
@@ -54,10 +56,20 @@ function initDeps(o, data) {
                 notify(key);
             }
         });
+    };
+
+    for (var i = 0; i < keys.length; i++) {
+        _loop(i);
     }
 
     return o;
 }
 
-export { initDeps };
+function defineComponent(option) {
+    var o = {};
+    initDeps(o, option.data);
 
+    return o;
+}
+
+exports.defineComponent = defineComponent;

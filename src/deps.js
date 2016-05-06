@@ -1,26 +1,23 @@
 
-function defineDeps(option) {
-    var o = {};
-
-    var data = option.data;
+function initDeps(o, data) {
     var funcs = {};
-    var callstacks  = [];
-    var obs = {};
+    var callstack  = [];
+    var deps = {};
 
     var notify = function (key) {
-        if (!obs[key]) {
+        if (!deps[key]) {
             return;
         }
-        let keys = Object.keys(obs[key]);
+        var keys = Object.keys(deps[key]);
         for (let i = 0; i < keys.length; i++) {
-            let key = keys[i];
-            let value = funcs[key].call(o);
-            if (data[key] != value) {
-                data[key] = value;
-                notify(key);
+            let k = keys[i];
+            let v = funcs[k].call(o);
+            if (data[k] !== v) {
+                data[k] = v;
+                notify(k);
             }
         }
-    };
+    }
 
     var keys = Object.keys(data);
     for (let i = 0; i < keys.length; i++) {
@@ -38,12 +35,12 @@ function defineDeps(option) {
             configurable: false,
             enumerable: true,
             get: function () {
-                if (callstacks.length > 0) {
-                    let last = callstacks[callstacks.length - 1];
-                    if (!obs[key]) {
-                        obs[key] = {};
+                if (callstack.length > 0) {
+                    let last = callstack[callstack.length - 1];
+                    if (!deps[key]) {
+                        deps[key] = {};
                     }
-                    obs[key][last] = true;
+                    deps[key][last] = true;
                 }
                 return data[key];
             },
@@ -62,17 +59,17 @@ function defineDeps(option) {
             enumerable: true,
             get: function () {
                 if (!(key in data)) {
-                    if (callstacks.length > 0) {
-                        let last = callstacks[callstacks.length - 1];
-                        if (!obs[key]) {
-                            obs[key] = {};
+                    if (callstack.length > 0) {
+                        let last = callstack[callstack.length - 1];
+                        if (!deps[key]) {
+                            deps[key] = {};
                         }
-                        obs[key][last] = true;
+                        deps[key][last] = true;
                     }
 
-                    callstacks.push(key);
-                    data[key] = funcs[key].call(this);
-                    callstacks.pop();
+                    callstack.push(key);
+                    data[key] = funcs[key].call(o);
+                    callstack.pop();
                 }
 
                 return data[key];
@@ -86,5 +83,5 @@ function defineDeps(option) {
     return o;
 }
 
-export { defineDeps };
+export { initDeps };
 

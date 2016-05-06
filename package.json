@@ -1,17 +1,17 @@
 {
-    "name": "add",
+    "name": "mui",
     "version": "0.0.1",
     "description": "0.0.1",
-    "main": "dist/add.js",
+    "main": "dist/mui.js",
     "files": [
-        "dist/add.js",
-        "dist/add.common.js",
-        "dist/add.min.js",
+        "dist/mui.js",
+        "dist/mui.common.js",
+        "dist/mui.min.js",
         "src"
     ],
     "repository": {
         "type": "git",
-        "url": "https://github.com/LelouchHe/jsdev.git"
+        "url": "https://github.com/LelouchHe/mui.git"
     },
     "scripts": {
         "build": "node build/build.js",
